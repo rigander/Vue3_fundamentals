@@ -1,30 +1,51 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+      <div>
+          <button @click="addLike">Like</button>
+          <button @click="addDislike">Dislike</button>
+          <hr>
+      </div>
+      <div>Number of Likes: <strong>{{ likes }}</strong></div>
+      <div>Number of Dislikes: <strong>{{ dislikes }}</strong></div>
+  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+export default {
+    data() {
+        return {
+           likes: 0,
+           dislikes: 0,
+        }
+    },
+    methods: {
+      addLike(){
+          this.likes += 1;
+      },
+      addDislike(){
+          this.dislikes +=1;
+      }
     }
-  }
+}
+</script>
+
+<style>
+body{
+    background-color: #3c3f41;
+    color: aliceblue;
+    font-size: 30px;
+}
+textarea{
+    background-color: aliceblue;
+}
+button{
+    margin: 10px;
+    width: 100px;
+    height: 25px;
+    color: chocolate;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 3px;
+    border: none;
 }
 </style>
