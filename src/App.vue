@@ -1,12 +1,24 @@
 <template>
   <div>
       <div>
-          <button @click="addLike">Like</button>
-          <button @click="addDislike">Dislike</button>
-          <hr>
+          <form>
+              <input class="input" type="text" placeholder="Name">
+              <br>
+              <textarea
+                      class="textarea"
+                      type="text"
+                      placeholder="Description"
+                      rows="10" cols="60"
+              ></textarea>
+              <br>
+              <button>Create</button>
+          </form>
       </div>
-      <div>Number of Likes: <strong>{{ likes }}</strong></div>
-      <div>Number of Dislikes: <strong>{{ dislikes }}</strong></div>
+     <div class="post" v-for="post in posts">
+         <div><strong>Name: </strong>{{post.title}}</div>
+         <div><strong>Description: </strong>{{post.body}}</div>
+         <div><strong>Id: </strong>{{post.id}}</div>
+     </div>
   </div>
 </template>
 
@@ -14,29 +26,37 @@
 export default {
     data() {
         return {
-           likes: 0,
-           dislikes: 0,
+           posts: [
+               {id: 1, title: 'JavaScript', body: 'JS Description'},
+               {id: 2, title: 'Python', body: 'Python Description'},
+               {id: 3, title: 'Java', body: 'Java Description'},
+               {id: 4, title: 'C++', body: 'C++ Description'},
+           ]
         }
     },
     methods: {
-      addLike(){
-          this.likes += 1;
-      },
-      addDislike(){
-          this.dislikes +=1;
-      }
+
     }
 }
 </script>
 
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 body{
     background-color: #3c3f41;
     color: aliceblue;
     font-size: 30px;
 }
-textarea{
-    background-color: aliceblue;
+.post{
+    margin-top: 15px;
+    background-color: #2b2b2b;
+    padding: 15px;
+    border: 3px solid darkkhaki;
+    border-radius: 3px;
 }
 button{
     margin: 10px;
@@ -47,5 +67,23 @@ button{
     font-weight: bold;
     border-radius: 3px;
     border: none;
+}
+input{
+    margin: 10px;
+    padding: 5px;
+    width: 490px;
+    height: 25px;
+    background-color: #4ca674;
+    border: none;
+    border-radius: 2px;
+}
+textarea{
+    margin: 10px;
+    padding: 5px;
+    resize: none;
+    font-size: 14px;
+    background-color: #4ca674;
+    border: none;
+    border-radius: 2px;
 }
 </style>
