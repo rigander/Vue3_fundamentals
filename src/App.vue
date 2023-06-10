@@ -1,17 +1,27 @@
 <template>
   <div>
       <div>
-          <form>
-              <input class="input" type="text" placeholder="Name">
+          <form @submit.prevent>
+              <input  v-bind:value="title"
+                      @input="title = $event.target.value"
+                      class="input"
+                      type="text"
+                      placeholder="Name"
+              >
               <br>
               <textarea
+                      v-bind:value="body"
+                      @input="body = $event.target.value"
                       class="textarea"
                       type="text"
                       placeholder="Description"
                       rows="10" cols="60"
               ></textarea>
               <br>
-              <button>Create</button>
+              <button
+                  class="btn"
+                  @click="createPost"
+              >Create</button>
           </form>
       </div>
      <div class="post" v-for="post in posts">
@@ -31,11 +41,28 @@ export default {
                {id: 2, title: 'Python', body: 'Python Description'},
                {id: 3, title: 'Java', body: 'Java Description'},
                {id: 4, title: 'C++', body: 'C++ Description'},
-           ]
+           ],
+            title: '',
+            body: '',
         }
     },
     methods: {
-
+        createPost() {
+            const newPost = {
+               id: Date.now(),
+               title: this.title,
+               body: this.body,
+            }
+            this.posts.push(newPost);
+            this.title = '';
+            this.body = '';
+        },
+        inputTitle(event){
+            this.title = event.target.value;
+        },
+        inputBody(event){
+            this.body = event.target.value;
+        }
     }
 }
 </script>
@@ -73,7 +100,7 @@ input{
     padding: 5px;
     width: 490px;
     height: 25px;
-    background-color: #4ca674;
+    background-color: #bbb666;
     border: none;
     border-radius: 2px;
 }
@@ -82,7 +109,7 @@ textarea{
     padding: 5px;
     resize: none;
     font-size: 14px;
-    background-color: #4ca674;
+    background-color: #bbb666;
     border: none;
     border-radius: 2px;
 }
