@@ -1,23 +1,22 @@
 <template>
     <form @submit.prevent>
-        <input  v-bind:value="post.title"
-                @input="post.title = $event.target.value"
+        <input
+                v-model="post.title"
                 class="input"
                 type="text"
                 placeholder="Name"
         >
         <br>
         <textarea
-                v-bind:value="post.body"
-                @input="post.body = $event.target.value"
+                v-model="post.body"
                 class="textarea"
-                type="text"
                 placeholder="Description"
                 rows="10" cols="60"
         ></textarea>
         <br>
         <button
                 class="btn"
+                @click="createPost"
         >Create</button>
     </form>
 </template>
@@ -28,6 +27,16 @@ export default {
     data(){
         return {
             post:{
+                title: '',
+                body: ''
+            }
+        }
+    },
+    methods: {
+        createPost() {
+            this.post.id = Date.now();
+            this.$emit('create', this.post)
+            this.post = {
                 title: '',
                 body: ''
             }
@@ -64,5 +73,12 @@ button{
     font-weight: bold;
     border-radius: 3px;
     border: none;
+}
+button:active{
+    background-color: #b9b561;
+    color: aliceblue;
+}
+button:hover{
+    cursor: pointer;
 }
 </style>
