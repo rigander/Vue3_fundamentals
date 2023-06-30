@@ -14,10 +14,10 @@
                 rows="10" cols="60"
         ></textarea>
         <br>
-        <button
+        <my-button
                 class="btn"
                 @click="createPost"
-        >Create</button>
+        >Create</my-button>
     </form>
 </template>
 
@@ -63,22 +63,5 @@ textarea{
     background-color: #bbb666;
     border: none;
     border-radius: 2px;
-}
-button{
-    margin: 10px;
-    width: 100px;
-    height: 25px;
-    color: chocolate;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 3px;
-    border: none;
-}
-button:active{
-    background-color: #b9b561;
-    color: aliceblue;
-}
-button:hover{
-    cursor: pointer;
 }
 </style>

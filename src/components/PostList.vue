@@ -1,14 +1,20 @@
 <template>
-    <div class="post" v-for="post in posts">
-        <div><strong>Name: </strong>{{post.title}}</div>
-        <div><strong>Description: </strong>{{post.body}}</div>
-        <div><strong>Id: </strong>{{post.id}}</div>
+    <div>
+        <h3 class="title__list-of-users">
+            List of users</h3>
     </div>
+<post-item
+        :post="post"
+        v-for="post in posts"
+/>
 </template>
 
 <script>
+import PostItem from "@/components/PostItem.vue";
+
 export default {
     name: "PostList",
+    components: {PostItem},
     props: {
         posts: {
             type: Array,
@@ -20,11 +26,8 @@ export default {
 </script>
 
 <style scoped>
-.post{
-    margin-top: 15px;
-    background-color: #2b2b2b;
-    padding: 15px;
-    border: 3px solid darkkhaki;
-    border-radius: 3px;
+.title__list-of-users{
+    margin: 15px;
+    color: chocolate;
 }
 </style>
