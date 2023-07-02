@@ -1,18 +1,16 @@
 <template>
     <form @submit.prevent>
-        <input
+        <my-input
                 v-model="post.title"
-                class="input"
                 type="text"
                 placeholder="Name"
-        >
+        />
         <br>
-        <textarea
+        <my-input
                 v-model="post.body"
-                class="textarea"
                 placeholder="Description"
                 rows="10" cols="60"
-        ></textarea>
+        />
         <br>
         <my-button
                 class="btn"
@@ -22,6 +20,7 @@
 </template>
 
 <script>
+
 export default {
     name: "PostForm",
     data(){
@@ -46,15 +45,6 @@ export default {
 </script>
 
 <style scoped>
-input{
-    margin: 10px;
-    padding: 5px;
-    width: 490px;
-    height: 25px;
-    background-color: #bbb666;
-    border: none;
-    border-radius: 2px;
-}
 textarea{
     margin: 10px;
     padding: 5px;
