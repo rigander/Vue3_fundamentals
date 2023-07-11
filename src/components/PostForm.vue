@@ -9,7 +9,6 @@
         <my-input
                 v-model="post.body"
                 placeholder="Description"
-                rows="10" cols="60"
         />
         <br>
         <my-button
@@ -45,13 +44,4 @@ export default {
 </script>
 
 <style scoped>
-textarea{
-    margin: 10px;
-    padding: 5px;
-    resize: none;
-    font-size: 14px;
-    background-color: #bbb666;
-    border: none;
-    border-radius: 2px;
-}
 </style>
