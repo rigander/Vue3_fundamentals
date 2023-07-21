@@ -2,6 +2,9 @@
   <div class="app">
    <h1>Posts Page</h1>
    <my-button
+           @click="fetchPosts"
+   >Get Posts</my-button>
+   <my-button
            @click="showDialog"
    >Create Post
    </my-button>
@@ -23,6 +26,7 @@
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
 import MyButton from "@/components/UI/MyButton.vue";
+import axios from "axios";
 export default {
     components: {
         MyButton,
@@ -30,14 +34,9 @@ export default {
     },
     data() {
         return {
-           posts: [
-               {id: 1, title: 'JavaScript', body: 'JS Description'},
-               {id: 2, title: 'Python', body: 'Python Description'},
-               {id: 3, title: 'Java', body: 'Java Description'},
-               {id: 4, title: 'C++', body: 'C++ Description'},
-               {id: 5, title: 'TS', body: 'TS Description'},
-           ],
+           posts: [],
             dialogVisible: false,
+            modificatorValue: ''
         }
     },
     methods: {
@@ -50,6 +49,14 @@ export default {
         },
         showDialog(){
             this.dialogVisible = true;
+        },
+        async fetchPosts() {
+          try {
+            const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
+            this.posts = response.data;
+          }catch (e){
+            alert('Error')
+          }
         }
     }
 }
