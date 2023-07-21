@@ -2,9 +2,6 @@
   <div class="app">
    <h1>Posts Page</h1>
    <my-button
-           @click="fetchPosts"
-   >Get Posts</my-button>
-   <my-button
            @click="showDialog"
    >Create Post
    </my-button>
@@ -58,6 +55,9 @@ export default {
             alert('Error')
           }
         }
+    },
+    mounted() {
+        this.fetchPosts();
     }
 }
 </script>
