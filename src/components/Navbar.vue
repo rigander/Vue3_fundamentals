@@ -2,6 +2,7 @@
     <div class="navbar">
       <div class="header"></div>
         <div class="navbar__btns">
+            <my-button @click="$router.push('/')">Main</my-button>
             <my-button @click="$router.push('/posts')">Posts</my-button>
             <my-button @click="$router.push('/about')">About</my-button>
         </div>
