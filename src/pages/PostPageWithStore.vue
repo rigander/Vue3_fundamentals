@@ -1,149 +1,117 @@
 <template>
     <div>
-        <h1>{{ $store.state.isAuth ? "Authorised user" : "User is not authorised" }}</h1>
-        <h1>{{ $store.getters.doubleLikes }}</h1>
-        <div>
-            <my-button @click="$store.commit('incrementLikes')">Like</my-button>
-            <my-button @click="$store.commit('decrementLikes')">Dislike</my-button>
-        </div>
-        <h1>Posts Page</h1>
+        <h1>Post Page</h1>
         <my-input
-                v-model="searchQuery"
-                placeholder="Search..."
-                v-focus
+            :model-value="searchQuery"
+            @update:model-value="setSearchQuery"
+            placeholder="Search...."
+            v-focus
         />
         <div class="app__btns">
             <my-button
-                    @click="showDialog"
-            >Create Post
+                @click="showDialog"
+            >
+                Create Post
             </my-button>
             <my-select
-                    v-model="selectedSort"
-                    :options="sortOptions"
+                :model-value="selectedSort"
+                @update:model-value="setSelectedSort"
+                :options="sortOptions"
             />
         </div>
-        <my-dialog
-                v-model:show="dialogVisible"
-        >
+        <my-dialog v-model:show="dialogVisible">
             <post-form
-                    @create="createPost"
+                @create="createPost"
             />
         </my-dialog>
         <post-list
-                :posts="sortedAndSearchedPosts"
-                @remove="removePost"
-                v-if="!isPostsLoading"
+            :posts="sortedAndSearchedPosts"
+            @remove="removePost"
+            v-if="!isPostsLoading"
         />
-        <div
-                v-else
-        >Loading Posts...</div>
-        <div v-intersection="loadMorePosts" class="observer"
-        ></div>
+        <div v-else>Идет загрузка...</div>
+        <div v-intersection="loadMorePosts" class="observer"></div>
+        <div class="page__wrapper">
+            <div
+                v-for="pageNumber in totalPages"
+                :key="pageNumber"
+                class="page"
+                :class="{
+              'current-page': page === pageNumber
+            }"
+                @click="changePage(pageNumber)"
+            >
+                {{ pageNumber }}
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import PostForm from "@/components/PostForm.vue";
-import PostList from "@/components/PostList.vue";
-import MyButton from "@/components/UI/MyButton.vue";
-import axios from "axios";
-import MySelect from "@/components/UI/MySelect.vue";
+import PostForm from "@/components/PostForm";
+import PostList from "@/components/PostList";
+import MyButton from "@/components/UI/MyButton";
+import axios from 'axios';
+import MySelect from "@/components/UI/MySelect";
+import MyInput from "@/components/UI/MyInput";
+import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+
 export default {
     components: {
+        MyInput,
         MySelect,
         MyButton,
         PostList, PostForm
     },
     data() {
         return {
-            posts: [],
             dialogVisible: false,
-            isPostsLoading: false,
-            selectedSort: '',
-            searchQuery: '',
-            page: 1,
-            limit: 10,
-            totalPages: 0,
-            sortOptions: [
-                {value: 'title', name: 'By name'},
-                {value: 'body', name: 'By description'},
-                {value: 'id', name: 'By Id'},
-            ]
         }
     },
     methods: {
-        createPost(post){
+        ...mapMutations({
+            setPage: 'post/setPage',
+            setSearchQuery: 'post/setSearchQuery',
+            setSelectedSort: 'post/setSelectedSort',
+        }),
+        ...mapActions({
+            loadMorePosts: 'post/loadMorePosts',
+            fetchPosts: 'post/fetchPosts'
+        }),
+        createPost(post) {
             this.posts.push(post);
             this.dialogVisible = false;
         },
         removePost(post) {
             this.posts = this.posts.filter(p => p.id !== post.id)
         },
-        showDialog(){
+        showDialog() {
             this.dialogVisible = true;
         },
-        changePage(pageNumber){
-            this.page = pageNumber
-        },
-        async fetchPosts() {
-            try {
-                this.isPostsLoading = true;
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-                    params: {
-                        _page: this.page,
-                        _limit: this.limit
-                    }
-                });
-                this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
-                this.posts = response.data;
-            }catch (e){
-                alert('Error')
-            } finally {
-                this.isPostsLoading = false;
-            }
-        },
-        async loadMorePosts() {
-            try {
-                this.page+= 1;
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
-                    params: {
-                        _page: this.page,
-                        _limit: this.limit
-                    }
-                });
-                this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
-                this.posts = [...this.posts, ...response.data];
-            }catch (e){
-                alert('Error')
-            }
-        }
     },
     mounted() {
         this.fetchPosts();
-        console.log(this.$refs.observer);
-        // const options = {
-        //     rootMargin: "0px",
-        //     threshold: 1.0,
-        // };
-        // const callback = (entries, observer) => {
-        //     if (entries [0].isIntersecting && this.page < this.totalPages) {
-        //         this.loadMorePosts()
-        //     }
-        // };
-        // const observer = new IntersectionObserver(callback, options);
-        // observer.observe(this.$refs.observer);
     },
     computed: {
-        sortedPosts() {
-            return [...this.posts].sort((postOne, postTwo) => {
-                return postOne[this.selectedSort]?.localeCompare(postTwo[this.selectedSort])
-            })
-        },
-        sortedAndSearchedPosts() {
-            return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchQuery.toLowerCase()))
-        }
+        ...mapState({
+            posts: state => state.post.posts,
+            isPostsLoading: state => state.post.isPostsLoading,
+            selectedSort: state => state.post.selectedSort,
+            searchQuery: state => state.post.searchQuery,
+            page: state => state.post.page,
+            limit: state => state.post.limit,
+            totalPages: state => state.post.totalPages,
+            sortOptions: state => state.post.sortOptions
+        }),
+        ...mapGetters({
+            sortedPosts: 'post/sortedPosts',
+            sortedAndSearchedPosts: 'post/sortedAndSearchedPosts'
+        })
     },
     watch: {
+        // page() {
+        //   this.fetchPosts()
+        // }
     }
 }
 </script>
